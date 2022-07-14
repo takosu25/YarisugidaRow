@@ -1,0 +1,8 @@
+name: yarisugidarouplugin
+version: 0.0.1
+main: yrsg.YrsgMain
+commands:
+  yrsg:
+    description: Command no setumei
+    usage: /<command>
+    default: true
