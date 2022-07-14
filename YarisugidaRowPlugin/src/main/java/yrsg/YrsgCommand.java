@@ -26,7 +26,7 @@ public class YrsgCommand implements CommandExecutor {
 			}else if(args[0].equals("join")) {
 				if(args[1].equals("@a")) {
 					for(Player p:player.getWorld().getPlayers()) {
-						yg.JoinPlayer(p);
+						//yg.JoinPlayer(p);
 					}
 				}
 			}else if(args[0].equals("start")) {

@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -29,7 +26,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -84,7 +80,9 @@ public class YrsgGame implements Listener{
 	}
 
 	public void Start() {
+		/*
 		world.setDifficulty(Difficulty.PEACEFUL);
+		*/
 		bb = Bukkit.createBossBar("制限時間",BarColor.GREEN,BarStyle.SOLID);
 		bb.setProgress(1);
 		bb.setVisible(true);
@@ -94,6 +92,7 @@ public class YrsgGame implements Listener{
 		v.setAI(false);
 		vv = v;
 		vv.setNoDamageTicks(999999999);
+		/*
 		for(Player p:players) {
 			scores.put(p, 0);
 			p.getInventory().clear();
@@ -110,10 +109,12 @@ public class YrsgGame implements Listener{
 			p.getInventory().addItem(bow,new ItemStack(Material.ARROW,1),heiwa,new ItemStack(Material.EMERALD,4));
 			bb.addPlayer(p);
 		}
+		*/
 		NewGame();
 	}
 
 	public void NewGame() {
+		/*
 		now++;
 		//初期化
 		heiwa = false;
@@ -121,12 +122,13 @@ public class YrsgGame implements Listener{
 		sengen.clear();
 		rules.clear();
 		syusis.clear();
-
+		*/
 		List<Integer> occupied = new ArrayList<Integer>();
 		Random rnd = new Random();
 		checktime = true;
 		game = true;
 		time = players.size() * 30;
+		/*
 		for(Player p:players) {
 			p.setGameMode(GameMode.ADVENTURE);
 			for(PotionEffect pe : p.getActivePotionEffects()) {
@@ -152,6 +154,7 @@ public class YrsgGame implements Listener{
 			p.sendMessage(ChatColor.WHITE + "陣営：" + YrsgData.zineiName[YrsgData.GetZinei((Zinei)YrsgData.rule[rule][2])]);
 			p.sendMessage(ChatColor.WHITE + "勝利条件：" + YrsgData.zineiWin[zineinumber]);
 		}
+		*/
 		ReScoreboard();
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(mainPlugin, new Runnable() {
 			public void run() {
@@ -227,12 +230,14 @@ public class YrsgGame implements Listener{
 		return target;
 	}
 
+	/*
 	public void JoinPlayer(Player player) {
 		if(!players.contains(player)) {
 			players.add(player);
 			player.sendMessage("「それちょっと、やりすぎだ狼」に参加しました。");
 		}
 	}
+	*/
 
 	public void HeiwaSengen() {
 		int ind = -1;
