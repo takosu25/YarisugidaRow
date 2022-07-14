@@ -27,7 +27,7 @@
       <artifactId>spigot</artifactId>
 
       <!-- ↓ (Minecraftバージョン)-R0.1-SNAPSHOT -->
-      <version>1.17.1-R0.1-SNAPSHOT</version>
+      <version>1.19-R0.1-SNAPSHOT</version>
    </dependency>
  </dependencies>
 </project>
