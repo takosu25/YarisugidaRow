@@ -22,7 +22,7 @@ public class YrsgCommand implements CommandExecutor {
 		if(sender instanceof Player) {
 			Player player = (Player)sender;
 			if(args[0].equals("newgame")) {
-				yg = new YrsgGame(mainPlugin);
+				//yg = new YrsgGame(mainPlugin);
 			}else if(args[0].equals("join")) {
 				if(args[1].equals("@a")) {
 					for(Player p:player.getWorld().getPlayers()) {

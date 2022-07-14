@@ -50,11 +50,15 @@ public class YSPlayer implements Listener{
 		bowm.addEnchant(Enchantment.ARROW_DAMAGE, 100, true);
 		bowm.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
 		bow.setItemMeta(bowm);
+		ItemStack sword = new ItemStack(Material.IRON_SWORD);
+		ItemMeta swordm = sword.getItemMeta();
+		swordm.addEnchant(Enchantment.DAMAGE_ALL, 100, true);
+		sword.setItemMeta(swordm);
 		ItemStack heiwa = new ItemStack(Material.STICK);
 		ItemMeta heiwam = heiwa.getItemMeta();
 		heiwam.setDisplayName("平和宣言");
 		heiwa.setItemMeta(heiwam);
-		player.getInventory().addItem(bow,heiwa,new ItemStack(Material.ARROW));
+		player.getInventory().addItem(bow,sword,heiwa,new ItemStack(Material.ARROW));
 	}
 	
 	public void setJob(int jobID) {

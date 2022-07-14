@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Villager;
@@ -62,108 +58,12 @@ public class YrsgGame implements Listener{
 	World world;
 	BossBar bb;
 
-	public YrsgGame(Plugin plugin) {
-		mainPlugin = plugin;
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-		world = Bukkit.getServer().getWorld("battleRoom");
-	}
-
-	public void CancelEvents() {
-		PlayerMoveEvent.getHandlerList().unregister(this);
-		EntityDamageByEntityEvent.getHandlerList().unregister(this);
-		PlayerInteractEvent.getHandlerList().unregister(this);
-		PlayerInteractEntityEvent.getHandlerList().unregister(this);
-		vv.remove();
-		for(Player p:players) {
-			bb.removePlayer(p);
-		}
-	}
-
-	public void Start() {
-		/*
-		world.setDifficulty(Difficulty.PEACEFUL);
-		*/
-		bb = Bukkit.createBossBar("制限時間",BarColor.GREEN,BarStyle.SOLID);
-		bb.setProgress(1);
-		bb.setVisible(true);
-		Villager v = (Villager)world.spawnEntity(new Vector(-148,8,-20).toLocation(world), EntityType.VILLAGER);
-		v.setCustomName("ショップ");
-		v.setCustomNameVisible(true);
-		v.setAI(false);
-		vv = v;
-		vv.setNoDamageTicks(999999999);
-		/*
-		for(Player p:players) {
-			scores.put(p, 0);
-			p.getInventory().clear();
-			ItemStack bow = new ItemStack(Material.BOW);
-			ItemMeta bowm = bow.getItemMeta();
-			bowm.addEnchant(Enchantment.ARROW_DAMAGE, 100, true);
-			bowm.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
-			bow.setItemMeta(bowm);
-			ItemStack heiwa = new ItemStack(Material.STICK);
-			ItemMeta heiwam = heiwa.getItemMeta();
-			heiwam.setDisplayName("平和宣言");
-			heiwam.setLore(YrsgShop.Discription("右クリックで使用できる。平和宣言をする。5秒後に結果が出る。全員が同じ陣営の場合、自分に2ポイント。そうじゃない場合、自分に-2ポイント追加される。宣言は、残り時間が半分以下ではない時に使用すると、周りにばれる。"));
-			heiwa.setItemMeta(heiwam);
-			p.getInventory().addItem(bow,new ItemStack(Material.ARROW,1),heiwa,new ItemStack(Material.EMERALD,4));
-			bb.addPlayer(p);
-		}
-		*/
-		NewGame();
-	}
-
 	public void NewGame() {
-		/*
-		now++;
-		//初期化
-		heiwa = false;
-		livingplayers.clear();
-		sengen.clear();
-		rules.clear();
-		syusis.clear();
-		*/
-		List<Integer> occupied = new ArrayList<Integer>();
-		Random rnd = new Random();
-		checktime = true;
-		game = true;
-		time = players.size() * 30;
-		/*
-		for(Player p:players) {
-			p.setGameMode(GameMode.ADVENTURE);
-			for(PotionEffect pe : p.getActivePotionEffects()) {
-				p.removePotionEffect(pe.getType());
-			}
-			List<YrsgSyusi> ys = new ArrayList<YrsgSyusi>();
-			syusis.put(p, ys);
-			int index = 0;
-			do {
-				index = rnd.nextInt(vs.length);
-			}while(occupied.contains(index));
-			occupied.add(index);
-			p.teleport(vs[index].toLocation(world));
-			int rule = rnd.nextInt(YrsgData.rule.length);
-			rules.put(p, rule);
-			p.sendTitle(ChatColor.WHITE + "あなたは" + YrsgData.GetCC((Zinei)YrsgData.rule[rule][2]) + (String)YrsgData.rule[rule][0], "役職確認タイム",20, 200, 20);
-			p.sendMessage("");
-			p.sendMessage("");
-			p.sendMessage("-----------------------");
-			int zineinumber = YrsgData.GetZinei((Zinei)YrsgData.rule[rule][2]);
-			p.sendMessage(ChatColor.WHITE + "役職名：" +  YrsgData.GetCC((Zinei)YrsgData.rule[rule][2]) + (String)YrsgData.rule[rule][0]);
-			p.sendMessage(ChatColor.WHITE + "能力：" + (String)YrsgData.rule[rule][1]);
-			p.sendMessage(ChatColor.WHITE + "陣営：" + YrsgData.zineiName[YrsgData.GetZinei((Zinei)YrsgData.rule[rule][2])]);
-			p.sendMessage(ChatColor.WHITE + "勝利条件：" + YrsgData.zineiWin[zineinumber]);
-		}
-		*/
 		ReScoreboard();
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(mainPlugin, new Runnable() {
 			public void run() {
 				checktime = false;
 				StartAbilities();
-				for(Player p:players) {
-					p.sendTitle("ゲームスタート！", now +  "/" + max,20,100,20);
-					livingplayers.add(p);
-				}
 				timeid = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(mainPlugin, new Runnable() {
 					public void run() {
 						if(!game) {
@@ -229,15 +129,6 @@ public class YrsgGame implements Listener{
 		Player target = ps.get(0);
 		return target;
 	}
-
-	/*
-	public void JoinPlayer(Player player) {
-		if(!players.contains(player)) {
-			players.add(player);
-			player.sendMessage("「それちょっと、やりすぎだ狼」に参加しました。");
-		}
-	}
-	*/
 
 	public void HeiwaSengen() {
 		int ind = -1;
@@ -359,7 +250,6 @@ public class YrsgGame implements Listener{
 				winner = p;
 			}
 		}
-		CancelEvents();
 		for(Player p:players) {
 			p.sendTitle(winner.getDisplayName() + "の勝利！","ポイント：" + max, 20, 100, 20);
 			p.setGameMode(GameMode.SURVIVAL);
