@@ -18,7 +18,7 @@ public class YSData {
 			{"狂人","占われると、村人陣営だと出る。",Zinei.Zinrou},
 			{"瞬狼","足が速い。",Zinei.Zinrou},
 			{"占い師","ゲーム開始時、ランダムで自分以外の誰か一人の陣営が分かる。",Zinei.Murabito},
-			{"賂人","無難日になった場合、1ポイント入手できるが、自分以外のプレイヤーは2エメラルド入手できる。",Zinei.Midium}
+			{"賂人","無難日になった場合、自分の生死を問わず1ポイント入手できるが、自分以外のプレイヤーは2エメラルド入手できる。",Zinei.Midium}
 	};
 	public static enum Zinei {
 		Murabito,Zinrou,Midium
@@ -44,6 +44,11 @@ public class YSData {
 			{"洗脳者(村人)","スリ(人狼)","クリーパー(中立)","偽善平和主義者(中立)","カニバリスト(中立)"}	
 	};
 	
+	//0:無難日
+	public static String[] cause = {
+			"無難日"
+	};
+	
 	//座標一覧
 	public static Vector[] vs = {new Vector(-109,9,-6),new Vector(-109,9,-42),new Vector(-109,9,-58),new Vector(-134,9,-60),new Vector(-163,9,-57),
 			new Vector(-168,9,-32)};
@@ -55,7 +60,7 @@ public class YSData {
 		return (String)jobs[jobID][1];
 	}
 	public static String getZineiName(Zinei z) {
-		return zineiName[getZineiIndex(z)];
+		return getCC(z) + zineiName[getZineiIndex(z)];
 	}
 	public static String getZineiWin(Zinei z) {
 		return zineiWin[getZineiIndex(z)];

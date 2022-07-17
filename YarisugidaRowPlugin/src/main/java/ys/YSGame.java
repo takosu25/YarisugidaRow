@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -35,6 +37,8 @@ public class YSGame {
 	List<Player> players = new ArrayList<Player>();
 	//生存プレイヤー一覧
 	List<Player> livings = new ArrayList<Player>();
+	//平和宣言者
+	List<Player> heiwa = new ArrayList<Player>();
 	//プレイヤーデータ
 	HashMap<Player,YSPlayer> playerdata = new HashMap<Player,YSPlayer>();
 	
@@ -42,6 +46,9 @@ public class YSGame {
 	private int gameTime = 0;
 	//最大試合回数
 	private int gameTimeMax = 8;
+	
+	///現在、ゲーム中か
+	boolean nowgame = true;
 	
 	//ゲーム内時間
 	int time;
@@ -73,13 +80,35 @@ public class YSGame {
 		}
 	}
 	
+	public void gameset(String cause) {
+		nowgame = false;
+		for(Player p:players) {
+			p.setGameMode(GameMode.SPECTATOR);
+			p.sendTitle(ChatColor.RED + "ゲーム終了！", "理由：" + cause,20,100,20);
+		}
+		new BukkitRunnable() {
+			public void run() {
+				for(Player p: players) {
+					playerdata.get(p).reserveToScore();
+				}
+				new BukkitRunnable() {
+					public void run() {
+						gameTime++;
+					}
+				}.runTaskLater(plugin, 150);
+			}
+		}.runTaskLater(plugin, 140);
+	}
+	
 	/**
 	 * 新しい1日を始める
 	 */
 	void newday() {
+		nowgame = true;
 		List<Integer> occupied = new ArrayList<Integer>();
 		gameTime++;
 		livings.clear();
+		heiwa.clear();
 		for(Player p: players) {
 			//ゲーム開始地点にテレポートする
 			int index = 0;
@@ -98,6 +127,7 @@ public class YSGame {
 			public void run() {
 				for(Player p:players) {
 					p.sendTitle("ゲームスタート！", gameTime + "/" + gameTimeMax,20,100,20);
+					playerdata.get(p).startAbility();
 				}
 				timeReduce();
 			}
@@ -118,7 +148,8 @@ public class YSGame {
 		bb.setTitle("残り" + time + "秒");
 		bb.setProgress((double)time/(double)maxTime);
 		if(time == 0) {
-			//TODO 無難日
+			//無難日
+			new YSEnd(this,0);
 		}else {
 			new BukkitRunnable() {
 				public void run() {
@@ -151,5 +182,58 @@ public class YSGame {
 		if(!players.contains(player)) {
 			players.add(player);
 		}
+	}
+	
+	public List<Player> getPlayers(){
+		return players;
+	}
+	public List<Player> getPlayersWithout(Player... withouts){
+		List<Player> result = new ArrayList<Player>();
+		for(Player p:players) {
+			result.add(p);
+		}
+		for(Player p:withouts) {
+			result.remove(p);
+		}
+		return result;
+	}
+	public List<Player> getLivings(){
+		return livings;
+	}
+	
+	public List<Player> getPlayersFromJob(int jobID){
+		return getPlayersFromJob(jobID,players);
+	}
+	public List<Player> getLivingsFromJob(int jobID){
+		return getPlayersFromJob(jobID,livings);
+	}
+	private List<Player> getPlayersFromJob(int jobID,List<Player> list){
+		List<Player> result = new ArrayList<Player>();
+		for(Player p:players) {
+			if(playerdata.get(p).getJob() == jobID) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
+	
+	public List<Player> getPlayersFromZinei(YSData.Zinei zineiID){
+		return getPlayersFromZinei(zineiID,players);
+	}
+	public List<Player> getLivingsFromZinei(YSData.Zinei zineiID){
+		return getPlayersFromZinei(zineiID,livings);
+	}
+	private List<Player> getPlayersFromZinei(YSData.Zinei zineiID,List<Player> list){
+		List<Player> result = new ArrayList<Player>();
+		for(Player p: list) {
+			if(playerdata.get(p).getZinei() == zineiID) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
+	
+	public YSPlayer getPlayerData(Player player) {
+		return playerdata.get(player);
 	}
 }

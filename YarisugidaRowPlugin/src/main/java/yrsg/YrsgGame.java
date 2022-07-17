@@ -63,7 +63,6 @@ public class YrsgGame implements Listener{
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(mainPlugin, new Runnable() {
 			public void run() {
 				checktime = false;
-				StartAbilities();
 				timeid = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(mainPlugin, new Runnable() {
 					public void run() {
 						if(!game) {
@@ -80,42 +79,6 @@ public class YrsgGame implements Listener{
 				}, 0, 20);
 			}
 		},240);
-	}
-
-	public void StartAbilities() {
-		for(Player p:players) {
-			switch(rules.get(p)) {
-			//平和主義者
-			case 4:
-				int ind = -1;
-				boolean result = true;
-				for(Player ps:players) {
-					int index = YrsgData.GetZinei((Zinei)YrsgData.rule[rules.get(ps)][2]);
-					if(ind == -1) {
-						ind = index;
-					}else {
-						if(ind != index) {
-							result = false;
-						}
-					}
-				}
-				p.sendMessage("[平和主義者]" + (result?"平和宣言は成功します。":"平和宣言は失敗します。"));
-				break;
-			//瞬狼
-			case 6:
-				p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,100000,3));
-				break;
-			//占い師
-			case 7:
-				Player target = GetRandomPlayerWithoutMe(p);
-				String resultn = YrsgData.zineiName[YrsgData.GetZinei((Zinei)YrsgData.rule[rules.get(target)][2])];
-				if(rules.get(target) == 5) {
-					resultn = "村人";
-				}
-				p.sendMessage(target.getDisplayName() + "は、" + resultn + "陣営です。");
-				break;
-			}
-		}
 	}
 
 	public Player GetRandomPlayerWithoutMe(Player player) {
