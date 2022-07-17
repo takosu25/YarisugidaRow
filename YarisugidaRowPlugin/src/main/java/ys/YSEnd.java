@@ -25,6 +25,7 @@ public class YSEnd {
 	
 	void end() {
 		ysg.gameset(cause);
+		
 	}
 	
 	//無難日
